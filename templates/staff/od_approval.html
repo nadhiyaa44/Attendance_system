@@ -1,0 +1,270 @@
+{% extends "base.html" %}
+
+{% block title %}OD Approval{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container admin-dashboard">
+    
+    <div class="card">
+        <h1 class="card-title">✅ On-Duty (OD) Approval</h1>
+        <p style="color: #6b7280; margin-bottom: 30px;">
+            📅 {{ current_date }} | Review and approve/reject OD requests from students
+        </p>
+        
+        <!-- Summary Stats -->
+        <div class="grid grid-3" style="margin-bottom: 30px;">
+            <div class="stat-box" style="background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);">
+                <div class="info">
+                    <h3 style="color: white;">{{ pending_requests|length if pending_requests else 0 }}</h3>
+                    <p style="color: white;">Pending Requests</p>
+                </div>
+            </div>
+            
+            <div class="stat-box" style="background: #d1fae5;">
+                <div class="info">
+                    <h3 style="color: #065f46;">{{ history|selectattr('status', 'equalto', 'approved')|list|length if history else 0 }}</h3>
+                    <p style="color: #065f46;">Approved Today</p>
+                </div>
+            </div>
+            
+            <div class="stat-box" style="background: #fee2e2;">
+                <div class="info">
+                    <h3 style="color: #991b1b;">{{ history|selectattr('status', 'equalto', 'rejected')|list|length if history else 0 }}</h3>
+                    <p style="color: #991b1b;">Rejected Today</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Pending Requests -->
+        <h2 style="color: #333; margin: 40px 0 20px;">⏳ Pending Approval Requests</h2>
+        
+        {% if pending_requests and pending_requests|length > 0 %}
+            {% for od in pending_requests %}
+            <div style="padding: 25px; border: 2px solid #e5e7eb; border-radius: 12px; margin-bottom: 20px; background: #fafafa; position: relative;">
+                
+                <!-- Priority Badge if urgent -->
+                {% if od.is_urgent %}
+                <div style="position: absolute; top: 15px; right: 15px; background: #ef4444; color: white; padding: 5px 15px; border-radius: 20px; font-size: 12px; font-weight: bold;">
+                    🚨 URGENT
+                </div>
+                {% endif %}
+                
+                <div style="display: flex; justify-content: space-between; align-items: start; gap: 20px;">
+                    <!-- Student Info -->
+                    <div style="flex: 1;">
+                        <h3 style="color: #333; margin-bottom: 15px; font-size: 18px;">
+                            👤 {{ od.student_name }} 
+                            <span style="color: #6b7280; font-size: 16px; font-weight: normal;">
+                                ({{ od.student_id }})
+                            </span>
+                        </h3>
+                        
+                        <div class="grid grid-2" style="gap: 15px; margin-bottom: 15px;">
+                            <div>
+                                <p style="color: #6b7280; font-size: 14px; margin-bottom: 8px;">
+                                    <strong>📅 Date:</strong> {{ od.date }}
+                                </p>
+                                <p style="color: #6b7280; font-size: 14px; margin-bottom: 8px;">
+                                    <strong>⏰ Time:</strong> {{ od.start_time }} - {{ od.end_time }}
+                                </p>
+                            </div>
+                            <div>
+                                <p style="color: #6b7280; font-size: 14px; margin-bottom: 8px;">
+                                    <strong>🏫 Class:</strong> {{ od.class }}
+                                </p>
+                                <p style="color: #6b7280; font-size: 14px; margin-bottom: 8px;">
+                                    <strong>📝 Type:</strong> {{ od.od_type|capitalize }}
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                            <p style="color: #374151; font-size: 14px; margin-bottom: 5px;">
+                                <strong>📋 Reason:</strong>
+                            </p>
+                            <p style="color: #6b7280; font-size: 14px; line-height: 1.6;">
+                                {{ od.reason }}
+                            </p>
+                        </div>
+                        
+                        {% if od.supporting_doc %}
+                        <div style="margin-bottom: 15px;">
+                              <a href="{{ url_for('static', filename='uploads/od_documents/' + od.supporting_doc) }}" 
+                               target="_blank" 
+                               class="btn btn-secondary" 
+                               style="padding: 8px 20px; font-size: 14px; display: inline-block;">
+                                📎 View Supporting Document
+                            </a>
+                        </div>
+                        {% endif %}
+                        
+                        <p style="color: #9ca3af; font-size: 13px;">
+                            <strong>🕐 Submitted:</strong> {{ od.submitted_at }}
+                        </p>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div style="display: flex; flex-direction: column; gap: 12px; min-width: 150px;">
+                        <button class="btn btn-success" 
+                                style="padding: 12px 25px; font-size: 15px; white-space: nowrap; width: 100%;"
+                                onclick="approveOD('{{ od.request_id }}', '{{ od.student_id }}', '{{ od.student_name }}')">
+                            ✅ Approve
+                        </button>
+                        <button class="btn btn-danger" 
+                                style="padding: 12px 25px; font-size: 15px; white-space: nowrap; width: 100%;"
+                                onclick="rejectOD('{{ od.request_id }}', '{{ od.student_id }}', '{{ od.student_name }}')">
+                            ❌ Reject
+                        </button>
+                        <button class="btn btn-secondary" 
+                                style="padding: 12px 25px; font-size: 15px; white-space: nowrap; width: 100%;"
+                                onclick="viewStudentAttendance('{{ od.student_id }}')">
+                            📊 View Attendance
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+        <div style="text-align: center; padding: 60px; color: #6b7280; background: #f9fafb; border-radius: 12px;">
+            <div style="font-size: 64px; margin-bottom: 20px;">✅</div>
+            <h3 style="color: #333;">No Pending Requests</h3>
+            <p>All OD requests have been processed!</p>
+        </div>
+        {% endif %}
+    </div>
+    
+    <!-- Recent History -->
+    <div class="card" style="margin-top: 40px;">
+        <h2 class="card-title">📜 Recent Approval History</h2>
+        
+        {% if history and history|length > 0 %}
+        <div style="overflow-x: auto;">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Student</th>
+                        <th>Class</th>
+                        <th>OD Date</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th>Processed By</th>
+                        <th>Processed At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in history[:20] %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>
+                            <strong>{{ record.student_name }}</strong><br>
+                            <small style="color: #6b7280;">{{ record.student_id }}</small>
+                        </td>
+                        <td>{{ record.class }}</td>
+                        <td>{{ record.date }}</td>
+                        <td>{{ record.od_type|capitalize }}</td>
+                        <td>
+                            {% if record.status == 'approved' %}
+                                <span class="badge badge-success">✅ Approved</span>
+                            {% else %}
+                                <span class="badge badge-danger">❌ Rejected</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ record.approved_by }}</td>
+                        <td>{{ record.approved_at }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p style="text-align: center; color: #6b7280; padding: 40px;">
+            No history records available
+        </p>
+        {% endif %}
+    </div>
+    
+</div>
+
+<script>
+    function approveOD(requestId, studentId, studentName) {
+        if (confirm(`✅ Approve OD request for ${studentName} (${studentId})?\n\nThis will mark their attendance as PRESENT for the approved period.`)) {
+            const btn = event.target;
+            btn.disabled = true;
+            btn.textContent = '⏳ Approving...';
+            
+            fetch(`/staff/od-approve/${requestId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => response.json())
+              .then(data => {
+                if (data.success) {
+                    alert('✅ OD request approved successfully!\n\nAttendance has been marked as PRESENT for the approved period.\nStudent will be notified via email.');
+                    window.location.reload();
+                } else {
+                    alert('❌ Failed to approve: ' + (data.message || 'Unknown error'));
+                    btn.disabled = false;
+                    btn.textContent = '✅ Approve';
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+                alert('❌ Network error occurred');
+                btn.disabled = false;
+                btn.textContent = '✅ Approve';
+            });
+        }
+    }
+    
+    function rejectOD(requestId, studentId, studentName) {
+        const remarks = prompt(`❌ Reject OD request for ${studentName} (${studentId})\n\nPlease enter reason for rejection (required):`);
+        
+        if (remarks === null) {
+            return; // User cancelled
+        }
+        
+        if (!remarks.trim()) {
+            alert('❌ Please provide a reason for rejection');
+            return rejectOD(requestId, studentId, studentName);
+        }
+        
+        if (confirm(`Are you sure you want to REJECT this OD request?\n\nReason: ${remarks}`)) {
+            const btn = event.target;
+            btn.disabled = true;
+            btn.textContent = '⏳ Rejecting...';
+            
+            fetch(`/staff/od-reject/${requestId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ remarks: remarks })
+            }).then(response => response.json())
+              .then(data => {
+                if (data.success) {
+                    alert('✅ OD request rejected successfully!\n\nStudent will be notified via email with your remarks.');
+                    window.location.reload();
+                } else {
+                    alert('❌ Failed to reject: ' + (data.message || 'Unknown error'));
+                    btn.disabled = false;
+                    btn.textContent = '❌ Reject';
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+                alert('❌ Network error occurred');
+                btn.disabled = false;
+                btn.textContent = '❌ Reject';
+            });
+        }
+    }
+    
+    function viewStudentAttendance(studentId) {
+        window.location.href = `/staff/student-attendance/${studentId}`;
+    }
+</script>
+{% endblock %}

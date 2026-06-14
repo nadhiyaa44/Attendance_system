@@ -1,0 +1,305 @@
+{% extends "base.html" %}
+
+{% block title %}Reports{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container admin-dashboard">
+    
+    <div class="card">
+        <h1 class="card-title">📈 Reports & Analytics</h1>
+        
+        <!-- Report Type Selection -->
+        <div class="grid grid-4" style="margin-bottom: 30px;">
+            <a href="?type=attendance" class="action-card {% if report_type == 'attendance' %}active{% endif %}">
+                <div style="font-size: 40px; margin-bottom: 10px;">📊</div>
+                <h3>Attendance Report</h3>
+            </a>
+            
+            <a href="?type=defaulters" class="action-card {% if report_type == 'defaulters' %}active{% endif %}">
+                <div style="font-size: 40px; margin-bottom: 10px;">⚠️</div>
+                <h3>Defaulters List</h3>
+            </a>
+            
+            <a href="?type=subject-wise" class="action-card {% if report_type == 'subject-wise' %}active{% endif %}">
+                <div style="font-size: 40px; margin-bottom: 10px;">📚</div>
+                <h3>Subject-wise</h3>
+            </a>
+            
+            <a href="?type=monthly" class="action-card {% if report_type == 'monthly' %}active{% endif %}">
+                <div style="font-size: 40px; margin-bottom: 10px;">📅</div>
+                <h3>Monthly Report</h3>
+            </a>
+        </div>
+        
+        <!-- Filter Options -->
+        <form method="GET" action="{{ url_for('staff.reports') }}">
+            <input type="hidden" name="type" value="{{ report_type }}">
+            
+            <div class="grid grid-4" style="margin-bottom: 30px;">
+                <div class="form-group">
+                    <label>Start Date</label>
+                    <input type="date" 
+                           name="start_date" 
+                           class="form-control" 
+                           value="{{ start_date }}">
+                </div>
+                
+                <div class="form-group">
+                    <label>End Date</label>
+                    <input type="date" 
+                           name="end_date" 
+                           class="form-control" 
+                           value="{{ end_date }}">
+                </div>
+                
+                <div class="form-group">
+                    <label>Class</label>
+                    <select name="class" class="form-control">
+                        <option value="">All Classes</option>
+                        <option value="CSE-A">CSE-A</option>
+                        <option value="CSE-B">CSE-B</option>
+                        <option value="ECE-A">ECE-A</option>
+                        <option value="ECE-B">ECE-B</option>
+                    </select>
+                </div>
+                
+                <div class="form-group" style="display: flex; align-items: flex-end;">
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        🔍 Generate Report
+                    </button>
+                </div>
+            </div>
+        </form>
+        
+        <!-- Report Display Area -->
+        {% if report_data %}
+        
+            <!-- Attendance Report -->
+            {% if report_type == 'attendance' %}
+            <div style="margin-top: 30px;">
+                <h2 style="color: #333; margin-bottom: 20px;">📊 Attendance Summary</h2>
+                
+                <div class="grid grid-4" style="margin-bottom: 30px;">
+                    <div class="stat-box">
+                        <div class="info">
+                            <h3>{{ report_data.summary.total_students }}</h3>
+                            <p>Total Students</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-box" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <div class="info">
+                            <h3 style="color: white;">{{ report_data.summary.avg_percentage }}%</h3>
+                            <p style="color: white;">Avg Attendance</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-box" style="background: #d1fae5;">
+                        <div class="info">
+                            <h3 style="color: #065f46;">{{ report_data.summary.above_75 }}</h3>
+                            <p style="color: #065f46;">Above 75%</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-box" style="background: #fee2e2;">
+                        <div class="info">
+                            <h3 style="color: #991b1b;">{{ report_data.summary.below_75 }}</h3>
+                            <p style="color: #991b1b;">Below 75%</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Class-wise Breakdown -->
+                <h3 style="color: #333; margin: 30px 0 20px;">Class-wise Attendance</h3>
+                <div style="overflow-x: auto;">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Class</th>
+                                <th>Total Students</th>
+                                <th>Average Attendance</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for class_data in report_data.class_wise %}
+                            <tr>
+                                <td><strong>{{ class_data.class }}</strong></td>
+                                <td>{{ class_data.total_students }}</td>
+                                <td>{{ class_data.avg_attendance }}%</td>
+                                <td>
+                                    {% if class_data.avg_attendance >= 85 %}
+                                        <span class="badge badge-success">Excellent</span>
+                                    {% elif class_data.avg_attendance >= 75 %}
+                                        <span class="badge badge-warning">Good</span>
+                                    {% else %}
+                                        <span class="badge badge-danger">Needs Improvement</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Defaulters Report -->
+            {% if report_type == 'defaulters' %}
+            <div style="margin-top: 30px;">
+                <h2 style="color: #333; margin-bottom: 20px;">⚠️ Students Below 75% Attendance</h2>
+                
+                <div style="overflow-x: auto;">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>S.No</th>
+                                <th>Student ID</th>
+                                <th>Name</th>
+                                <th>Class</th>
+                                <th>Attendance %</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if report_data.students %}
+                                {% for student in report_data.students %}
+                                <tr>
+                                    <td>{{ loop.index }}</td>
+                                    <td>{{ student.student_id }}</td>
+                                    <td>{{ student.name }}</td>
+                                    <td>{{ student.class }}</td>
+                                    <td>
+                                        <span class="badge badge-danger">{{ student.percentage }}%</span>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-primary" 
+                                                style="padding: 5px 15px; font-size: 14px;"
+                                                onclick="sendNotification('{{ student.student_id }}')">
+                                            📧 Notify
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="6" style="text-align: center; color: #10b981; padding: 40px;">
+                                        ✅ Great! All students have attendance above 75%
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% endif %}
+            
+        {% else %}
+        <div style="text-align: center; padding: 60px; color: #6b7280;">
+            <div style="font-size: 64px; margin-bottom: 20px;">📊</div>
+            <h3>Select report type and filters above</h3>
+            <p>Choose a report type and configure filters to generate insights</p>
+        </div>
+        {% endif %}
+        
+        <!-- Export Options -->
+        {% if report_data %}
+        <div style="margin-top: 40px; display: flex; gap: 15px; justify-content: flex-end; padding-top: 20px; border-top: 2px solid #e5e7eb;">
+            <button onclick="exportPDF()" class="btn btn-danger">
+                📄 Export PDF
+            </button>
+            <button onclick="exportExcel()" class="btn btn-success">
+                📊 Export Excel
+            </button>
+            <button onclick="window.print()" class="btn btn-secondary">
+                🖨️ Print
+            </button>
+            <button onclick="emailReport()" class="btn btn-primary">
+                📧 Email Report
+            </button>
+        </div>
+        {% endif %}
+        
+    </div>
+    
+</div>
+
+<script>
+    function sendNotification(studentId) {
+        if (confirm(`Send low attendance notification to ${studentId}?`)) {
+            fetch('/staff/send-notification', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ student_id: studentId })
+            }).then(response => response.json())
+              .then(data => {
+                if (data.success) {
+                    alert('✅ Notification sent successfully');
+                } else {
+                    alert('❌ Failed to send notification');
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+                alert('❌ Network error occurred');
+            });
+        }
+    }
+    
+    function exportPDF() {
+        alert('PDF export - Feature coming soon!');
+        // TODO: Implement PDF export
+    }
+    
+    function exportExcel() {
+        alert('Excel export - Feature coming soon!');
+        // TODO: Implement Excel export
+    }
+    
+    function emailReport() {
+        const email = prompt('Enter email address to send report:');
+        if (email) {
+            alert(`Report will be sent to ${email}`);
+            // TODO: Implement email functionality
+        }
+    }
+</script>
+
+<style>
+    .action-card {
+        background: white;
+        padding: 25px;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        transition: all 0.3s;
+        text-decoration: none;
+        color: inherit;
+        display: block;
+        border: 2px solid transparent;
+    }
+    
+    .action-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        border-color: #667eea;
+    }
+    
+    .action-card.active {
+        border-color: #667eea;
+        background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+    }
+    
+    @media print {
+        .btn, form, .action-card {
+            display: none !important;
+        }
+    }
+</style>
+{% endblock %}

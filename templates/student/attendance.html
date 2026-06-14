@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+
+{% block title %}My Attendance{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/student.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container student-dashboard">
+    
+    <div class="card">
+        <h1 class="card-title">📊 My Attendance Records</h1>
+        
+        <!-- Summary Cards -->
+        <div class="grid grid-4" style="margin-bottom: 30px;">
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 25px; border-radius: 10px; text-align: center;">
+                <h3 style="font-size: 48px; margin-bottom: 10px;">{{ attendance_summary.percentage }}%</h3>
+                <p style="opacity: 0.9;">Overall Attendance</p>
+            </div>
+            
+            <div style="background: #d1fae5; padding: 25px; border-radius: 10px; text-align: center;">
+                <h3 style="font-size: 48px; color: #065f46; margin-bottom: 10px;">{{ attendance_summary.present }}</h3>
+                <p style="color: #065f46;">Present</p>
+            </div>
+            
+            <div style="background: #fee2e2; padding: 25px; border-radius: 10px; text-align: center;">
+                <h3 style="font-size: 48px; color: #991b1b; margin-bottom: 10px;">{{ attendance_summary.absent }}</h3>
+                <p style="color: #991b1b;">Absent</p>
+            </div>
+            
+            <div style="background: #dbeafe; padding: 25px; border-radius: 10px; text-align: center;">
+                <h3 style="font-size: 48px; color: #1e40af; margin-bottom: 10px;">{{ attendance_summary.total }}</h3>
+                <p style="color: #1e40af;">Total Classes</p>
+            </div>
+        </div>
+        
+        <!-- Attendance Status Alert -->
+        {% if attendance_summary.percentage < 75 %}
+        <div class="alert alert-danger" style="margin-bottom: 30px;">
+            <strong>⚠️ Low Attendance Warning!</strong><br>
+            Your attendance is {{ attendance_summary.percentage }}%, which is below the required 75%.
+            Please attend classes regularly to avoid issues during exams.
+        </div>
+        {% elif attendance_summary.percentage < 85 %}
+        <div class="alert alert-warning" style="margin-bottom: 30px;">
+            <strong>📌 Attention!</strong><br>
+            Your attendance is {{ attendance_summary.percentage }}%. Try to maintain above 85% for better academic standing.
+        </div>
+        {% else %}
+        <div class="alert alert-success" style="margin-bottom: 30px;">
+            <strong>✅ Excellent!</strong><br>
+            Your attendance is {{ attendance_summary.percentage }}%. Keep up the good work!
+        </div>
+        {% endif %}
+        
+        <!-- Filter Options -->
+        <div class="grid grid-3" style="margin-bottom: 30px;">
+            <div class="form-group">
+                <label>Filter by Month</label>
+                <select id="monthFilter" class="form-control" onchange="filterAttendance()">
+                    <option value="">All Months</option>
+                    <option value="01">January</option>
+                    <option value="02">February</option>
+                    <option value="03">March</option>
+                    <option value="04">April</option>
+                    <option value="05">May</option>
+                    <option value="06">June</option>
+                    <option value="07">July</option>
+                    <option value="08">August</option>
+                    <option value="09">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Filter by Subject</label>
+                <select id="subjectFilter" class="form-control" onchange="filterAttendance()">
+                    <option value="">All Subjects</option>
+                    {% for subject in subjects %}
+                    <option value="{{ subject }}">{{ subject }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Filter by Status</label>
+                <select id="statusFilter" class="form-control" onchange="filterAttendance()">
+                    <option value="">All Status</option>
+                    <option value="present">Present</option>
+                    <option value="absent">Absent</option>
+                    <option value="od">On-Duty</option>
+                </select>
+            </div>
+        </div>
+        
+        <!-- Attendance Table -->
+        <div style="overflow-x: auto;">
+            <table class="table" id="attendanceTable">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Day</th>
+                        <th>Period</th>
+                        <th>Subject</th>
+                        <th>Time</th>
+                        <th>Status</th>
+                        <th>Marked At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if attendance_records %}
+                        {% for record in attendance_records %}
+                        <tr data-date="{{ record.date }}" data-subject="{{ record.subject }}" data-status="{{ record.status }}">
+                            <td>{{ record.date }}</td>
+                            <td>{{ record.day }}</td>
+                            <td>{{ record.period }}</td>
+                            <td>{{ record.subject }}</td>
+                            <td>{{ record.time }}</td>
+                            <td>
+                                {% if record.status == 'present' %}
+                                    <span class="badge badge-success">✅ Present</span>
+                                {% elif record.status == 'absent' %}
+                                    <span class="badge badge-danger">❌ Absent</span>
+                                {% elif record.status == 'od' %}
+                                    <span class="badge badge-info">📝 On-Duty</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ record.marked_at }}</td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="7" style="text-align: center; color: #6b7280; padding: 40px;">
+                                No attendance records found
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Subject-wise Attendance -->
+        <div style="margin-top: 40px;">
+            <h2 style="color: #333; margin-bottom: 20px;">📚 Subject-wise Attendance</h2>
+            
+            <div class="grid grid-2">
+                {% if subject_wise %}
+                    {% for subject_data in subject_wise %}
+                    <div style="background: #f9fafb; padding: 20px; border-radius: 10px; border: 2px solid #e5e7eb;">
+                        <h3 style="color: #667eea; margin-bottom: 15px;">{{ subject_data.subject }}</h3>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <span>Total Classes:</span>
+                            <strong>{{ subject_data.total }}</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <span>Present:</span>
+                            <strong style="color: #10b981;">{{ subject_data.present }}</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <span>Absent:</span>
+                            <strong style="color: #ef4444;">{{ subject_data.absent }}</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding-top: 10px; border-top: 2px solid #e5e7eb;">
+                            <span><strong>Percentage:</strong></span>
+                            <strong style="font-size: 24px; color: {% if subject_data.percentage >= 75 %}#10b981{% elif subject_data.percentage >= 60 %}#f59e0b{% else %}#ef4444{% endif %}">
+                                {{ subject_data.percentage }}%
+                            </strong>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p style="color: #6b7280;">No subject-wise data available</p>
+                {% endif %}
+            </div>
+        </div>
+        
+    </div>
+    
+</div>
+
+<script>
+    function filterAttendance() {
+        const monthFilter = document.getElementById('monthFilter').value;
+        const subjectFilter = document.getElementById('subjectFilter').value;
+        const statusFilter = document.getElementById('statusFilter').value;
+        const rows = document.querySelectorAll('#attendanceTable tbody tr');
+        
+        rows.forEach(row => {
+            const date = row.dataset.date || '';
+            const subject = row.dataset.subject || '';
+            const status = row.dataset.status || '';
+            
+            const monthMatch = !monthFilter || date.includes(`-${monthFilter}-`);
+            const subjectMatch = !subjectFilter || subject === subjectFilter;
+            const statusMatch = !statusFilter || status === statusFilter;
+            
+            row.style.display = (monthMatch && subjectMatch && statusMatch) ? '' : 'none';
+        });
+    }
+</script>
+{% endblock %}

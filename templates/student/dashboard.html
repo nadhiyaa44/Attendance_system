@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block title %}Student Dashboard{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/student.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container student-dashboard">
+    
+    <!-- Welcome Banner -->
+    <div class="welcome-banner">
+        <h1>Welcome, {{ name }}! 👋</h1>
+        <p>Student ID: {{ session.user_id }}</p>
+        <p>📅 {{ current_date }}</p>
+    </div>
+    
+    <!-- Attendance Summary -->
+    <div class="attendance-summary">
+        <div class="attendance-box">
+            <div class="percentage">{{ attendance.percentage }}%</div>
+            <div class="label">Overall Attendance</div>
+        </div>
+        
+        <div class="attendance-box present">
+            <div class="percentage">{{ attendance.present }}</div>
+            <div class="label">Present</div>
+        </div>
+        
+        <div class="attendance-box absent">
+            <div class="percentage">{{ attendance.absent }}</div>
+            <div class="label">Absent</div>
+        </div>
+        
+        <div class="attendance-box">
+            <div class="percentage">{{ attendance.total }}</div>
+            <div class="label">Total Classes</div>
+        </div>
+    </div>
+    
+    <!-- Quick Actions -->
+    <h2 style="color: white; margin: 40px 0 20px;">Quick Actions</h2>
+    <div class="quick-actions">
+        
+        <a href="/face-attendance/mark" class="action-card attendance">
+            <div class="icon">📸</div>
+            <h3>Mark Attendance</h3>
+            <p>Use face recognition</p>
+        </a>
+        
+        <a href="{{ url_for('student.attendance') }}" class="action-card attendance">
+            <div class="icon">📊</div>
+            <h3>View Attendance</h3>
+            <p>Check your records</p>
+        </a>
+        
+        <a href="{{ url_for('student.apply_od') }}" class="action-card od">
+            <div class="icon">📝</div>
+            <h3>Apply for OD</h3>
+            <p>Submit on-duty request</p>
+        </a>
+        
+        <a href="{{ url_for('student.bus_pass') }}" class="action-card bus">
+            <div class="icon">🚌</div>
+            <h3>Bus Pass</h3>
+            <p>Generate QR pass</p>
+        </a>
+        
+    </div>
+    
+    <!-- Today's Schedule -->
+    <div class="card" style="margin-top: 40px;">
+        <h2 class="card-title">📅 Today's Schedule</h2>
+        
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Period</th>
+                    <th>Time</th>
+                    <th>Subject</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if schedule %}
+                    {% for class in schedule %}
+                    <tr>
+                        <td>{{ class.period }}</td>
+                        <td>{{ class.start }} - {{ class.end }}</td>
+                        <td>{{ class.subject }}</td>
+                        <td>
+                            {% if class.attended %}
+                                <span class="badge badge-success">✅ Present</span>
+                            {% elif class.is_current %}
+                                <span class="badge badge-warning">⏳ In Progress</span>
+                            {% else %}
+                                <span class="badge badge-info">🕒 Upcoming</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="4" style="text-align: center; color: #6b7280; padding: 30px;">
+                            No classes scheduled for today
+                        </td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Recent OD Requests -->
+    <div class="card" style="margin-top: 40px;">
+        <h2 class="card-title">📋 My Recent OD Requests</h2>
+        
+        {% if recent_ods %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Reason</th>
+                        <th>Status</th>
+                        <th>Submitted</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for od in recent_ods %}
+                    <tr>
+                        <td>{{ od.date }}</td>
+                        <td>{{ od.reason[:40] }}{% if od.reason|length > 40 %}...{% endif %}</td>
+                        <td>
+                            {% if od.status == 'approved' %}
+                                <span class="badge badge-success">✅ Approved</span>
+                            {% elif od.status == 'rejected' %}
+                                <span class="badge badge-danger">❌ Rejected</span>
+                            {% else %}
+                                <span class="badge badge-warning">⏳ Pending</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ od.submitted_at }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p style="color: #6b7280; text-align: center; padding: 20px;">No OD requests submitted yet</p>
+        {% endif %}
+    </div>
+    
+</div>
+{% endblock %}

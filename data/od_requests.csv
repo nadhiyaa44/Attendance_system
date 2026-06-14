@@ -1,0 +1,3 @@
+request_id,student_id,date,start_time,end_time,reason,od_type,supporting_doc,class,department,status,submitted_at,approved_by,approved_at,remarks
+OD_1770798267,STU001,2026-02-12,09:43,13:43,iam going chennai college event,event,a37a761c-d9c8-4477-a99a-26b52de6e38f_software.pdf,ECE-B,Electronics Engineering,approved,2026-02-11 13:54:27,malar (STAFF001),2026-02-12 12:14:40,Approved
+OD_1771054710,STU002,2026-02-17,11:00,14:08,Paper presentation at conference held by PSG Arts and Science College,conference,,CS-A,Computer Science,approved,2026-02-14 13:08:30,malar (STAFF001),2026-02-14 13:09:52,Approved

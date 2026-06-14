@@ -1,0 +1,208 @@
+{% extends "base.html" %}
+
+{% block title %}Student Attendance - {{ student.name }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container admin-dashboard">
+    
+    <div class="card">
+        <!-- Back Button -->
+        <div style="margin-bottom: 20px;">
+            <a href="{{ url_for('staff.od_approval') }}" class="btn btn-secondary">
+                ← Back to OD Approval
+            </a>
+        </div>
+        
+        <h1 class="card-title">📊 Student Attendance Details</h1>
+        
+        <!-- Student Info -->
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 10px; margin-bottom: 30px;">
+            <h2 style="color: white; margin-bottom: 15px;">{{ student.name }}</h2>
+            <div class="grid grid-3">
+                <div>
+                    <p style="opacity: 0.9; margin-bottom: 5px;">Student ID</p>
+                    <h3 style="color: white;">{{ student.user_id }}</h3>
+                </div>
+                <div>
+                    <p style="opacity: 0.9; margin-bottom: 5px;">Department</p>
+                    <h3 style="color: white;">{{ student.department }}</h3>
+                </div>
+                <div>
+                    <p style="opacity: 0.9; margin-bottom: 5px;">Class</p>
+                    <h3 style="color: white;">{{ student.get('class', 'N/A') }}</h3>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Attendance Summary -->
+        <h2 style="color: #333; margin: 30px 0 20px;">Summary</h2>
+        <div class="grid grid-4" style="margin-bottom: 30px;">
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 25px; border-radius: 10px; text-align: center;">
+                <h3 style="font-size: 48px; margin-bottom: 10px; color: white;">{{ attendance_summary.percentage }}%</h3>
+                <p style="opacity: 0.9;">Overall Attendance</p>
+            </div>
+            
+            <div style="background: #d1fae5; padding: 25px; border-radius: 10px; text-align: center;">
+                <h3 style="font-size: 48px; color: #065f46; margin-bottom: 10px;">{{ attendance_summary.present }}</h3>
+                <p style="color: #065f46;">Present</p>
+            </div>
+            
+            <div style="background: #fee2e2; padding: 25px; border-radius: 10px; text-align: center;">
+                <h3 style="font-size: 48px; color: #991b1b; margin-bottom: 10px;">{{ attendance_summary.absent }}</h3>
+                <p style="color: #991b1b;">Absent</p>
+            </div>
+            
+            <div style="background: #dbeafe; padding: 25px; border-radius: 10px; text-align: center;">
+                <h3 style="font-size: 48px; color: #1e40af; margin-bottom: 10px;">{{ attendance_summary.total }}</h3>
+                <p style="color: #1e40af;">Total Classes</p>
+            </div>
+        </div>
+        
+        <!-- Status Alert -->
+        {% if attendance_summary.percentage < 75 %}
+        <div class="alert alert-danger" style="margin-bottom: 30px;">
+            <strong>⚠️ Low Attendance Warning!</strong><br>
+            This student's attendance is {{ attendance_summary.percentage }}%, which is below the required 75%.
+        </div>
+        {% elif attendance_summary.percentage >= 85 %}
+        <div class="alert alert-success" style="margin-bottom: 30px;">
+            <strong>✅ Excellent Attendance!</strong><br>
+            This student maintains {{ attendance_summary.percentage }}% attendance.
+        </div>
+        {% endif %}
+        
+        <!-- Subject-wise Attendance -->
+        {% if subject_wise %}
+        <h2 style="color: #333; margin: 40px 0 20px;">📚 Subject-wise Attendance</h2>
+        <div class="grid grid-2" style="margin-bottom: 30px;">
+            {% for subject_data in subject_wise %}
+            <div style="background: #f9fafb; padding: 20px; border-radius: 10px; border: 2px solid #e5e7eb;">
+                <h3 style="color: #667eea; margin-bottom: 15px;">{{ subject_data.subject }}</h3>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                    <span>Total Classes:</span>
+                    <strong>{{ subject_data.total }}</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                    <span>Present:</span>
+                    <strong style="color: #10b981;">{{ subject_data.present }}</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                    <span>Absent:</span>
+                    <strong style="color: #ef4444;">{{ subject_data.absent }}</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding-top: 10px; border-top: 2px solid #e5e7eb;">
+                    <span><strong>Percentage:</strong></span>
+                    <strong style="font-size: 24px; color: {% if subject_data.percentage >= 75 %}#10b981{% elif subject_data.percentage >= 60 %}#f59e0b{% else %}#ef4444{% endif %}">
+                        {{ subject_data.percentage }}%
+                    </strong>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <!-- Detailed Records -->
+        <h2 style="color: #333; margin: 40px 0 20px;">📋 Detailed Attendance Records</h2>
+        
+        {% if attendance_records %}
+        <div style="overflow-x: auto;">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Subject</th>
+                        <th>Period</th>
+                        <th>Status</th>
+                        <th>Marked By</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in attendance_records %}
+                    <tr>
+                        <td>{{ record.date }}</td>
+                        <td>{{ record.time }}</td>
+                        <td>{{ record.subject }}</td>
+                        <td>{{ record.period }}</td>
+                        <td>
+                            {% if record.status == 'present' %}
+                                <span class="badge badge-success">✅ Present</span>
+                            {% elif record.status == 'absent' %}
+                                <span class="badge badge-danger">❌ Absent</span>
+                            {% elif record.status == 'od' %}
+                                <span class="badge badge-info">📝 On-Duty</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ record.marked_by }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p style="text-align: center; color: #6b7280; padding: 40px;">
+            No attendance records found for this student.
+        </p>
+        {% endif %}
+        
+        <!-- Actions -->
+        <div style="margin-top: 30px; display: flex; gap: 15px; justify-content: flex-end;">
+            <button onclick="window.print()" class="btn btn-secondary">
+                🖨️ Print Report
+            </button>
+            <button onclick="exportToCSV()" class="btn btn-secondary">
+                📥 Export CSV
+            </button>
+            <a href="{{ url_for('staff.od_approval') }}" class="btn btn-primary">
+                ← Back to OD Approval
+            </a>
+        </div>
+    </div>
+    
+</div>
+
+<script>
+    function exportToCSV() {
+        const table = document.querySelector('table');
+        if (!table) return;
+        
+        let csv = [];
+        const rows = table.querySelectorAll('tr');
+        
+        rows.forEach(row => {
+            const cols = row.querySelectorAll('td, th');
+            const rowData = [];
+            
+            cols.forEach(col => {
+                // Remove badges and get text
+                let text = col.innerText || col.textContent;
+                text = text.replace(/[✅❌📝]/g, '').trim();
+                rowData.push(text);
+            });
+            
+            csv.push(rowData.join(','));
+        });
+        
+        const csvContent = csv.join('\n');
+        const blob = new Blob([csvContent], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = '{{ student.user_id }}_attendance.csv';
+        a.click();
+        window.URL.revokeObjectURL(url);
+    }
+</script>
+
+<style>
+    @media print {
+        .btn, nav, .footer {
+            display: none !important;
+        }
+    }
+</style>
+{% endblock %}

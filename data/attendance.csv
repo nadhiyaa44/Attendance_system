@@ -1,0 +1,112 @@
+student_id,date,time,status,subject,period,department,semester,class,marked_by,marked_at
+TEST001,2026-02-11,13:15:06,present,Test Subject,1,Computer Science,3,CS-A,Test Script,2026-02-11 13:15:06
+STU001,2026-02-11,13:23:54,present,Digital Electronics,4,Electronics Engineering,3,,System,2026-02-11 13:23:54
+STU001,2026-02-11,13:33:22,absent,Digital Communications,5,Electronics Engineering,3,2026-02-11 13:33:22
+STU001,2026-02-12,12:05:20,absent,PCB Design,4,Electronics Engineering,3,2026-02-12 12:05:20
+STU001,2026-02-12,12:05:21,absent,PCB Design,4,Electronics Engineering,3,2026-02-12 12:05:21
+STU001,2026-02-12,12:14:40,od,On-Duty,0,Electronics Engineering,3,ECE-B,malar,2026-02-12 12:14:40
+STU002,2026-02-12,18:05:33,present,Software Engineering,4,Computer Science,3,,System,2026-02-12 18:05:33
+STU002,2026-02-12,18:05:44,present,Software Engineering,4,Computer Science,3,,System,2026-02-12 18:05:44
+STU002,2026-02-12,18:05:55,present,Software Engineering,4,Computer Science,3,,System,2026-02-12 18:05:55
+STU002,2026-02-12,18:06:36,present,Software Engineering,4,Computer Science,3,,System,2026-02-12 18:06:36
+STU002,2026-02-12,18:06:44,present,Software Engineering,4,Computer Science,3,,System,2026-02-12 18:06:44
+STU002,2026-02-12,18:09:40,absent,Software Engineering,4,Computer Science,3,2026-02-12 18:09:40
+STU002,2026-02-12,18:09:51,absent,Software Engineering,4,Computer Science,3,2026-02-12 18:09:51
+STU002,2026-02-12,18:09:53,absent,Software Engineering,4,Computer Science,3,2026-02-12 18:09:53
+STU002,2026-02-13,13:10:48,present,Computer Graphics,4,Computer Science,3,,System,2026-02-13 13:10:48
+STU002,2026-02-13,13:10:55,present,Computer Graphics,4,Computer Science,3,,System,2026-02-13 13:10:55
+STU002,2026-02-13,13:13:05,absent,Computer Graphics,4,Computer Science,3,2026-02-13 13:13:05
+STU002,2026-02-13,13:13:06,absent,Computer Graphics,4,Computer Science,3,2026-02-13 13:13:06
+STU002,2026-02-13,13:13:54,absent,Computer Graphics,4,Computer Science,3,2026-02-13 13:13:54
+STU002,2026-02-14,13:09:52,od,On-Duty,0,Computer Science,3,CS-A,malar,2026-02-14 13:09:52
+STU001,2026-02-23,09:05:24,absent,Engineering Mathematics – III,1,Electronics Engineering,3,2026-02-23 09:05:24
+STU001,2026-02-23,09:05:28,absent,Engineering Mathematics – III,1,Electronics Engineering,3,2026-02-23 09:05:28
+STU002,2026-02-23,09:07:28,absent,Data Structures,1,Computer Science,3,2026-02-23 09:07:28
+STU006,2026-02-23,10:03:28,present,Operating Systems,2,Computer Science,3,,System,2026-02-23 10:03:28
+STU006,2026-02-23,10:03:39,present,Operating Systems,2,Computer Science,3,,System,2026-02-23 10:03:39
+STU002,2026-02-23,10:05:24,absent,Operating Systems,2,Computer Science,3,2026-02-23 10:05:24
+STU005,2026-02-23,10:05:24,absent,Operating Systems,2,Computer Science,3,2026-02-23 10:05:24
+STU006,2026-02-23,10:05:24,absent,Operating Systems,2,Computer Science,3,2026-02-23 10:05:24
+STU001,2026-02-23,10:05:24,absent,Electronic Devices & Circuits,2,Electronics Engineering,3,2026-02-23 10:05:24
+STU002,2026-02-23,10:05:28,absent,Operating Systems,2,Computer Science,3,2026-02-23 10:05:28
+STU005,2026-02-23,10:05:28,absent,Operating Systems,2,Computer Science,3,2026-02-23 10:05:28
+STU006,2026-02-23,10:05:28,absent,Operating Systems,2,Computer Science,3,2026-02-23 10:05:28
+STU001,2026-02-23,10:05:28,absent,Electronic Devices & Circuits,2,Electronics Engineering,3,2026-02-23 10:05:28
+STU002,2026-02-23,10:05:53,absent,Operating Systems,2,Computer Science,3,2026-02-23 10:05:53
+STU005,2026-02-23,10:05:53,absent,Operating Systems,2,Computer Science,3,2026-02-23 10:05:53
+STU006,2026-02-23,10:05:53,absent,Operating Systems,2,Computer Science,3,2026-02-23 10:05:53
+STU001,2026-02-23,10:05:53,absent,Electronic Devices & Circuits,2,Electronics Engineering,3,2026-02-23 10:05:53
+STU002,2026-02-23,10:05:54,absent,Operating Systems,2,Computer Science,3,2026-02-23 10:05:54
+STU005,2026-02-23,10:05:54,absent,Operating Systems,2,Computer Science,3,2026-02-23 10:05:54
+STU006,2026-02-23,10:05:54,absent,Operating Systems,2,Computer Science,3,2026-02-23 10:05:54
+STU001,2026-02-23,10:05:54,absent,Electronic Devices & Circuits,2,Electronics Engineering,3,2026-02-23 10:05:54
+STU002,2026-02-23,10:05:57,absent,Operating Systems,2,Computer Science,3,2026-02-23 10:05:57
+STU005,2026-02-23,10:05:57,absent,Operating Systems,2,Computer Science,3,2026-02-23 10:05:57
+STU006,2026-02-23,10:05:57,absent,Operating Systems,2,Computer Science,3,2026-02-23 10:05:57
+STU001,2026-02-23,10:05:57,absent,Electronic Devices & Circuits,2,Electronics Engineering,3,2026-02-23 10:05:57
+STU002,2026-02-23,10:05:58,absent,Operating Systems,2,Computer Science,3,2026-02-23 10:05:58
+STU005,2026-02-23,10:05:58,absent,Operating Systems,2,Computer Science,3,2026-02-23 10:05:58
+STU006,2026-02-23,10:05:58,absent,Operating Systems,2,Computer Science,3,2026-02-23 10:05:58
+STU001,2026-02-23,10:05:58,absent,Electronic Devices & Circuits,2,Electronics Engineering,3,2026-02-23 10:05:58
+STU006,2026-02-23,15:03:12,present,Web Development,6,Computer Science,3,,System,2026-02-23 15:03:12
+STU008,2026-02-23,15:04:04,present,Web Development,6,Computer Science,3,,System,2026-02-23 15:04:04
+STU002,2026-02-23,15:05:15,absent,Web Development,6,Computer Science,3,2026-02-23 15:05:15
+STU002,2026-02-23,15:05:16,absent,Web Development,6,Computer Science,3,2026-02-23 15:05:16
+STU005,2026-02-23,15:05:21,absent,Web Development,6,Computer Science,3,2026-02-23 15:05:21
+STU005,2026-02-23,15:05:21,absent,Web Development,6,Computer Science,3,2026-02-23 15:05:21
+STU006,2026-02-23,15:05:25,absent,Web Development,6,Computer Science,3,2026-02-23 15:05:25
+STU006,2026-02-23,15:05:27,absent,Web Development,6,Computer Science,3,2026-02-23 15:05:27
+STU007,2026-02-23,15:05:31,absent,Web Development,6,Computer Science,3,2026-02-23 15:05:31
+STU007,2026-02-23,15:05:32,absent,Web Development,6,Computer Science,3,2026-02-23 15:05:32
+STU008,2026-02-23,15:05:36,absent,Web Development,6,Computer Science,3,2026-02-23 15:05:36
+STU008,2026-02-23,15:05:37,absent,Web Development,6,Computer Science,3,2026-02-23 15:05:37
+STU001,2026-02-23,15:32:20,present,Programming for python,6,Electronics Engineering,3,,System,2026-02-23 15:32:20
+STU001,2026-02-23,15:35:42,absent,Programming for python,6,Electronics Engineering,3,2026-02-23 15:35:42
+STU002,2026-02-23,15:48:34,present,Python Programming,7,Computer Science,3,,System,2026-02-23 15:48:34
+STU002,2026-02-23,15:52:43,absent,Python Programming,7,Computer Science,3,2026-02-23 15:52:43
+STU002,2026-02-23,15:52:44,absent,Python Programming,7,Computer Science,3,2026-02-23 15:52:44
+STU005,2026-02-23,15:52:48,absent,Python Programming,7,Computer Science,3,2026-02-23 15:52:48
+STU005,2026-02-23,15:52:48,absent,Python Programming,7,Computer Science,3,2026-02-23 15:52:48
+STU006,2026-02-23,15:52:52,absent,Python Programming,7,Computer Science,3,2026-02-23 15:52:52
+STU006,2026-02-23,15:52:53,absent,Python Programming,7,Computer Science,3,2026-02-23 15:52:53
+STU007,2026-02-23,15:52:57,absent,Python Programming,7,Computer Science,3,2026-02-23 15:52:57
+STU007,2026-02-23,15:52:58,absent,Python Programming,7,Computer Science,3,2026-02-23 15:52:58
+STU008,2026-02-23,15:53:01,absent,Python Programming,7,Computer Science,3,2026-02-23 15:53:01
+STU008,2026-02-23,15:53:02,absent,Python Programming,7,Computer Science,3,2026-02-23 15:53:02
+STU002,2026-02-24,06:18:12,present,Software Engineering,1,Computer Science,3,,System,2026-02-24 06:18:12
+STU002,2026-02-24,06:21:04,absent,Software Engineering,1,Computer Science,3,2026-02-24 06:21:04
+STU005,2026-02-24,06:21:10,absent,Software Engineering,1,Computer Science,3,2026-02-24 06:21:10
+STU006,2026-02-24,06:21:16,absent,Software Engineering,1,Computer Science,3,2026-02-24 06:21:16
+STU007,2026-02-24,06:21:22,absent,Software Engineering,1,Computer Science,3,2026-02-24 06:21:22
+STU008,2026-02-24,06:21:27,absent,Software Engineering,1,Computer Science,3,2026-02-24 06:21:27
+STU009,2026-02-24,06:21:33,absent,Software Engineering,1,Computer Science,3,2026-02-24 06:21:33
+STU002,2026-02-24,09:05:45,absent,Software Engineering,1,Computer Science,3,2026-02-24 09:05:45
+STU002,2026-02-24,09:05:46,absent,Software Engineering,1,Computer Science,3,2026-02-24 09:05:46
+STU005,2026-02-24,09:06:33,absent,Software Engineering,1,Computer Science,3,2026-02-24 09:06:33
+STU005,2026-02-24,09:06:37,absent,Software Engineering,1,Computer Science,3,2026-02-24 09:06:37
+STU006,2026-02-24,09:06:52,absent,Software Engineering,1,Computer Science,3,2026-02-24 09:06:52
+STU006,2026-02-24,09:07:04,absent,Software Engineering,1,Computer Science,3,2026-02-24 09:07:04
+STU007,2026-02-24,09:07:13,absent,Software Engineering,1,Computer Science,3,2026-02-24 09:07:13
+STU007,2026-02-24,09:07:15,absent,Software Engineering,1,Computer Science,3,2026-02-24 09:07:15
+STU008,2026-02-24,09:07:25,absent,Software Engineering,1,Computer Science,3,2026-02-24 09:07:25
+STU009,2026-02-24,09:07:39,absent,Software Engineering,1,Computer Science,3,2026-02-24 09:07:39
+STU008,2026-02-24,09:07:53,absent,Software Engineering,1,Computer Science,3,2026-02-24 09:07:53
+STU001,2026-02-24,09:08:02,absent,Electronic Devices & Circuits,1,Electronics Engineering,3,2026-02-24 09:08:02
+STU009,2026-02-24,09:08:48,absent,Software Engineering,1,Computer Science,3,2026-02-24 09:08:48
+STU001,2026-02-24,09:09:33,absent,Electronic Devices & Circuits,1,Electronics Engineering,3,2026-02-24 09:09:33
+STU002,2026-02-24,10:05:45,absent,Web Technologies,2,Computer Science,3,2026-02-24 10:05:45
+STU002,2026-02-24,10:05:46,absent,Web Technologies,2,Computer Science,3,2026-02-24 10:05:46
+STU005,2026-02-24,10:05:58,absent,Web Technologies,2,Computer Science,3,2026-02-24 10:05:58
+STU006,2026-02-24,10:06:17,absent,Web Technologies,2,Computer Science,3,2026-02-24 10:06:17
+STU005,2026-02-24,10:06:20,absent,Web Technologies,2,Computer Science,3,2026-02-24 10:06:20
+STU007,2026-02-24,10:06:35,absent,Web Technologies,2,Computer Science,3,2026-02-24 10:06:35
+STU006,2026-02-24,10:06:36,absent,Web Technologies,2,Computer Science,3,2026-02-24 10:06:36
+STU007,2026-02-24,10:07:06,absent,Web Technologies,2,Computer Science,3,2026-02-24 10:07:06
+STU008,2026-02-24,10:07:07,absent,Web Technologies,2,Computer Science,3,2026-02-24 10:07:07
+STU008,2026-02-24,10:07:18,absent,Web Technologies,2,Computer Science,3,2026-02-24 10:07:18
+STU009,2026-02-24,10:07:26,absent,Web Technologies,2,Computer Science,3,2026-02-24 10:07:26
+STU009,2026-02-24,10:07:26,absent,Web Technologies,2,Computer Science,3,2026-02-24 10:07:26
+STU001,2026-02-24,10:07:35,absent,Digital Electronics,2,Electronics Engineering,3,2026-02-24 10:07:35
+STU001,2026-02-24,10:07:35,absent,Digital Electronics,2,Electronics Engineering,3,2026-02-24 10:07:35
+STU002,2026-03-12,19:31:09,present,Machine Learning,1,Computer Science,3,,System,2026-03-12 19:31:09
+STU002,2026-03-12,19:44:04,present,Software Engineering,4,Computer Science,3,,System,2026-03-12 19:44:04

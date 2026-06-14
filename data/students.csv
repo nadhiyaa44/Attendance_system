@@ -1,0 +1,10 @@
+user_id,name,email,parent_email,password,phone,class,roll_no,department,semester,face_registered,created_at
+STU002,Nadhiya  S,nadhiyaa44@gmail.com,nadhiyas826@gmail.com,fb1843c05390468c8c4114f7f788f4caddf4cc837cda994a99abcdba42cc2719,9025241046,CS-A,102,Computer Science,3,FALSE,12-02-2026 11:33
+STU003,Thiwisha M.S,231ct061@drngpasc.ac.in,thiwishams@gmail.com,5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8,CS-A,3,Computer Science,3,23-02-2026 09:31,,
+STU004,Dharshini K,231ct009@gmail.com,dharshinikannan2206@gmail.com,5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8,CS-A,4,Computer Science,3,23-02-2026 09:40,,
+STU005,Dharshini K,231ct009@drngpasc.ac.in,231ct009@gmail.com,8ebb363b1fd4ebf251d11eab3f2ff61b0d636ee2a6bbd89e519aa091d7a55049,,CS-A,,Computer Science,3,FALSE,23-02-2026 09:48
+STU006,Gopika S,231ct014@drngpasc.ac.in,231ct041@gmail.com,2c2763cff5d07d937f16fcb04b706f56a5d85c81c70a9dd61c44daf91cdeb5a5,,CS-A,,Computer Science,3,FALSE,23-02-2026 09:59
+STU007,Rugmalakshmi R,231ct050@drngpasc.ac.in,rugmalakshmi123@gmail.com,8ea44751321c320d425979baffcf60e904d258b9bdbb7ececccd42686d59f3bf,,CS-A,,Computer Science,3,FALSE,23-02-2026 10:11
+STU008,Charu M,231ct008@drngpasc.ac.in,charucbe2005@gmail.com,61a16c72d2f531f4527c13ef5840153c16c3e11abd6582138c4bd301bcde8132,,CS-A,,Computer Science,3,FALSE,23-02-2026 10:17
+STU001,jancy rani,jancyranijesus2001@gmail.com,tamilindira1997@gmail.com,6dd03e120290cef9327dc50843a18d521e6c474336aa635c9f897a68284624fd,9876543210,ECE-B,101,Electronics Engineering,3,FALSE,23-02-2026 15:17
+STU009,Chitra S,praveenct139@gmail.com,nadhiyaa26@gmail.com,c8c742dde8796f028fd34bbc1a46b149900e3360a78608791086f46843b451f6,,CS-A,,Computer Science,3,FALSE,23-02-2026 17:57

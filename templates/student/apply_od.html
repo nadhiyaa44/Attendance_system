@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+
+{% block title %}Apply for On-Duty{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/student.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container student-dashboard">
+    
+    <div class="card">
+        <h1 class="card-title">📝 Apply for On-Duty (OD)</h1>
+        
+        <!-- OD Application Form -->
+        <form method="POST" action="{{ url_for('student.apply_od') }}" enctype="multipart/form-data">
+            
+            <div class="grid grid-2">
+                <div class="form-group">
+                    <label for="od_type">OD Type <span style="color: red;">*</span></label>
+                    <select id="od_type" name="od_type" class="form-control" required>
+                        <option value="">Select Type</option>
+                        <option value="event">College Event</option>
+                        <option value="competition">Competition</option>
+                        <option value="conference">Conference/Seminar</option>
+                        <option value="sports">Sports</option>
+                        <option value="placement">Placement Drive</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="date">Date <span style="color: red;">*</span></label>
+                    <input type="date" id="date" name="date" class="form-control" required>
+                </div>
+            </div>
+            
+            <div class="grid grid-2">
+                <div class="form-group">
+                    <label for="start_time">Start Time <span style="color: red;">*</span></label>
+                    <input type="time" id="start_time" name="start_time" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="end_time">End Time <span style="color: red;">*</span></label>
+                    <input type="time" id="end_time" name="end_time" class="form-control" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="reason">Reason for OD <span style="color: red;">*</span></label>
+                <textarea id="reason" 
+                          name="reason" 
+                          class="form-control" 
+                          rows="4" 
+                          placeholder="Provide detailed reason for OD request..."
+                          required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="supporting_doc">Supporting Document (Optional)</label>
+                <input type="file" 
+                       id="supporting_doc" 
+                       name="supporting_doc" 
+                       class="form-control"
+                       accept=".pdf,.jpg,.jpeg,.png">
+                <small style="color: #6b7280;">Accepted formats: PDF, JPG, PNG (Max 5MB)</small>
+            </div>
+            
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" required>
+                    I confirm that the information provided is accurate
+                </label>
+            </div>
+            
+            <div style="display: flex; gap: 15px;">
+                <button type="submit" class="btn btn-primary" style="flex: 1;">
+                    ✅ Submit OD Request
+                </button>
+                <button type="reset" class="btn btn-secondary" style="flex: 1;">
+                    🔄 Reset Form
+                </button>
+            </div>
+        </form>
+    </div>
+    
+    <!-- My OD Requests -->
+    <div class="card" style="margin-top: 40px;">
+        <h2 class="card-title">📋 My OD Request History</h2>
+        
+        {% if pending_requests and pending_requests|length > 0 %}
+        <div style="overflow-x: auto;">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Request ID</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Type</th>
+                        <th>Reason</th>
+                        <th>Status</th>
+                        <th>Submitted</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for od in pending_requests %}
+                    <tr>
+                        <td>{{ od.request_id }}</td>
+                        <td>{{ od.date }}</td>
+                        <td>{{ od.start_time }} - {{ od.end_time }}</td>
+                        <td>{{ od.od_type|capitalize if od.od_type else 'N/A' }}</td>
+                        <td>{{ od.reason[:50] }}{% if od.reason|length > 50 %}...{% endif %}</td>
+                        <td>
+                            {% if od.status == 'approved' %}
+                                <span class="badge badge-success">✅ Approved</span>
+                            {% elif od.status == 'rejected' %}
+                                <span class="badge badge-danger">❌ Rejected</span>
+                            {% else %}
+                                <span class="badge badge-warning">⏳ Pending</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ od.submitted_at }}</td>
+                        <td>
+                            {% if od.status == 'pending' %}
+                            <button class="btn btn-danger" 
+                                    style="padding: 5px 15px; font-size: 14px;"
+                                    onclick="cancelOD('{{ od.request_id }}')">
+                                Cancel
+                            </button>
+                            {% else %}
+                            <button class="btn btn-secondary" 
+                                    style="padding: 5px 15px; font-size: 14px;"
+                                    onclick="viewDetails('{{ od.request_id }}')">
+                                View
+                            </button>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p style="text-align: center; color: #6b7280; padding: 40px;">
+            No OD requests found. Submit your first request above!
+        </p>
+        {% endif %}
+    </div>
+    
+    <!-- OD Guidelines -->
+    <div class="card" style="margin-top: 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+        <h2 style="color: white; margin-bottom: 20px;">📌 OD Request Guidelines</h2>
+        <ul style="line-height: 2; opacity: 0.95;">
+            <li>Submit OD requests at least <strong>2 days in advance</strong></li>
+            <li>Provide valid reason and supporting documents if available</li>
+            <li>OD requests are subject to approval by your department staff</li>
+            <li>Approved OD will be counted as <strong>PRESENT</strong> in attendance</li>
+            <li>Check your email for approval/rejection notifications</li>
+            <li>For urgent requests, contact your class advisor directly</li>
+        </ul>
+    </div>
+    
+</div>
+
+<script>
+    // Set minimum date to today
+    document.getElementById('date').min = new Date().toISOString().split('T')[0];
+    
+    function cancelOD(requestId) {
+        if (confirm('Are you sure you want to cancel this OD request?')) {
+            fetch(`/student/cancel-od/${requestId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => response.json())
+              .then(data => {
+                if (data.success) {
+                    alert('✅ OD request cancelled successfully');
+                    window.location.reload();
+                } else {
+                    alert('❌ Failed to cancel: ' + (data.message || 'Unknown error'));
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+                alert('❌ Network error occurred');
+            });
+        }
+    }
+    
+    function viewDetails(requestId) {
+        // Redirect to OD details page or show modal
+        window.location.href = `/student/od-details/${requestId}`;
+    }
+    
+    // Form validation
+    document.querySelector('form').addEventListener('submit', function(e) {
+        const startTime = document.getElementById('start_time').value;
+        const endTime = document.getElementById('end_time').value;
+        
+        if (startTime && endTime && startTime >= endTime) {
+            e.preventDefault();
+            alert('❌ End time must be after start time');
+            return false;
+        }
+    });
+</script>
+{% endblock %}
